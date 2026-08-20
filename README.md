@@ -26,3 +26,47 @@ Gravitational N-body simulation accelerated on the GPU with CUDA, taking a
 - `nbody_soa.cu` — structure-of-arrays layout
 - `nbody_render.cu` — disk-galaxy renderer (writes frame data)
 - `render.py` — reads `frames.bin` and renders `galaxy.gif`
+
+## Run it on Colab
+
+No local CUDA setup needed — [Google Colab](https://colab.research.google.com)
+gives you a free GPU (usually a T4, matching the benchmarks above) with `nvcc` and
+numpy/matplotlib/Pillow already installed. Run each block below in its own cell.
+
+**1. Enable the GPU:** Runtime → Change runtime type → Hardware accelerator → GPU → Save. Then verify:
+```python
+!nvidia-smi
+```
+
+**2. Clone the repo:**
+```python
+!git clone https://github.com/henry-tran07/cuda-nbody.git
+%cd cuda-nbody
+```
+(Use the `%cd` magic, not `!cd` — it persists the working directory across cells.)
+
+**3. Compile and run the simulation** (writes `frames.bin`):
+```python
+!nvcc -O3 nbody_render.cu -o nbody_render
+!./nbody_render
+```
+
+**4. Render the GIF** (reads `frames.bin`, writes `galaxy.gif`):
+```python
+!python3 render.py
+```
+
+**5. View / download the result:**
+```python
+from IPython.display import Image
+Image("galaxy.gif")
+```
+```python
+from google.colab import files
+files.download("galaxy.gif")
+```
+
+No `pip install` needed — the Python dependencies ship with Colab. To change the
+galaxy, tweak the parameters in `nbody_render.cu` (`n`, `steps`, `every`, `dt`,
+`soft`, `Mcenter`) and re-run steps 3–4; `render.py` reads `n` and the frame count
+from the file, so it adapts automatically.
