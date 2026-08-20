@@ -25,3 +25,4 @@ Gravitational N-body simulation accelerated on the GPU with CUDA, taking a
 - `nbody_tiled.cu` — shared-memory tiled version
 - `nbody_soa.cu` — structure-of-arrays layout
 - `nbody_render.cu` — disk-galaxy renderer (writes frame data)
+- `render.py` — reads `frames.bin` and renders `galaxy.gif`
